@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>ACCESO A SONICA</title>
+    <title>Acceso a SONICA</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <script src="https://unpkg.com/html5-qrcode"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -16,11 +16,11 @@
         }
         body {
             font-family: 'Open Sans', Arial, sans-serif;
-            background: linear-gradient(135deg, #e0e7ff 0%, #f0fdfa 100%);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             margin: 0;
             padding: 0;
             min-height: 100vh;
-            color: #22223b;
+            color: #f0f0f0;
             touch-action: manipulation;
             display: flex;
             flex-direction: column;
@@ -31,82 +31,89 @@
         .container {
             width: 100%;
             max-width: 500px;
-            background: #fff;
+            background: rgba(30, 30, 46, 0.9);
             border-radius: 18px;
-            box-shadow: 0 4px 24px rgba(30, 41, 59, 0.10);
-            padding: 25px 20px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+            padding: 20px;
             text-align: center;
+            backdrop-filter: blur(10px);
         }
         h1 {
-            color: #2563eb;
-            margin: 0 0 20px 0;
+            color: #8a2be2;
+            margin: 0 0 15px 0;
             font-size: 1.8rem;
             font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
         button {
-            background: linear-gradient(90deg, #2563eb 60%, #22d3ee 100%);
+            background: linear-gradient(90deg, #8a2be2 0%, #9370db 100%);
             color: #fff;
             border: none;
-            border-radius: 7px;
-            padding: 12px 20px;
+            border-radius: 50px;
+            padding: 14px 20px;
             font-size: 1em;
             font-weight: 600;
             cursor: pointer;
-            margin: 8px 0;
-            transition: all 0.2s;
-            box-shadow: 0 2px 8px rgba(37,99,235,0.08);
+            margin: 10px 0;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(138, 43, 226, 0.3);
             width: 100%;
             touch-action: manipulation;
         }
         button:hover, button:active {
-            background: linear-gradient(90deg, #1e40af 60%, #06b6d4 100%);
+            background: linear-gradient(90deg, #7a1dd2 0%, #8360d1 100%);
             transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(138, 43, 226, 0.4);
         }
         #reader {
             width: 100% !important;
             margin: 0 auto 15px auto;
-            border-radius: 10px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(30, 41, 59, 0.10);
-            background: #f1f5f9;
-            min-height: 250px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+            background: #1e1e2e;
+            min-height: 280px;
             position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
+            border: 2px solid #313244;
         }
         #message {
-            font-size: 1.1em;
+            font-size: 1em;
             margin: 15px 0;
             text-align: center;
             font-weight: 600;
             padding: 10px;
-            border-radius: 6px;
-            min-height: 28px;
+            border-radius: 8px;
+            min-height: 20px;
+            background: rgba(49, 50, 68, 0.6);
         }
         #message.red {
             color: #fff;
-            background: #ef4444;
-            border: 1px solid #b91c1c;
+            background: rgba(237, 135, 150, 0.3);
+            border: 1px solid #ed8796;
         }
         #message.green {
             color: #fff;
-            background: #22c55e;
-            border: 1px solid #15803d;
+            background: rgba(166, 227, 161, 0.3);
+            border: 1px solid #a6e3a1;
         }
         #message.purple {
             color: #fff;
-            background: #8b5cf6;
-            border: 1px solid #7c3aed;
+            background: rgba(203, 166, 247, 0.3);
+            border: 1px solid #cba6f7;
         }
         #scanned-list {
             margin-top: 18px;
-            background: #f9fafb;
-            border-radius: 8px;
+            background: rgba(49, 50, 68, 0.4);
+            border-radius: 12px;
             padding: 12px;
-            font-size: 1em;
+            font-size: 0.9em;
             min-height: 40px;
-            box-shadow: 0 1px 4px rgba(30, 41, 59, 0.06);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
             max-height: 200px;
             overflow-y: auto;
         }
@@ -114,7 +121,7 @@
             display: flex;
             justify-content: space-between;
             padding: 8px 0;
-            border-bottom: 1px solid #e5e7eb;
+            border-bottom: 1px solid rgba(110, 115, 141, 0.3);
         }
         .scan-item:last-child {
             border-bottom: none;
@@ -123,14 +130,14 @@
             font-weight: bold;
         }
         .cover-code {
-            color: #8b5cf6;
+            color: #cba6f7;
         }
         .entrada-code {
-            color: #22c55e;
+            color: #a6e3a1;
         }
         .scan-time {
-            color: #64748b;
-            font-size: 0.85em;
+            color: #a6adc8;
+            font-size: 0.8em;
         }
         .scan-result {
             position: fixed;
@@ -141,7 +148,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: rgba(0, 0, 0, 0.85);
+            background-color: rgba(17, 17, 27, 0.95);
             z-index: 1000;
             opacity: 0;
             pointer-events: none;
@@ -152,15 +159,16 @@
             pointer-events: all;
         }
         .result-content {
-            background: white;
+            background: #1e1e2e;
             padding: 30px;
-            border-radius: 15px;
+            border-radius: 20px;
             text-align: center;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
             transform: scale(0.9);
             transition: transform 0.3s ease;
             width: 85%;
             max-width: 350px;
+            border: 1px solid #313244;
         }
         .scan-result.show .result-content {
             transform: scale(1);
@@ -170,24 +178,26 @@
             margin-bottom: 20px;
         }
         .success {
-            color: #22c55e;
+            color: #a6e3a1;
         }
         .error {
-            color: #ef4444;
+            color: #ed8796;
         }
         .cover {
-            color: #8b5cf6;
+            color: #cba6f7;
         }
         .button-danger {
-            background: linear-gradient(90deg, #ef4444 60%, #f87171 100%) !important;
+            background: linear-gradient(90deg, #ed8796 0%, #f5a0b5 100%) !important;
+            box-shadow: 0 4px 12px rgba(237, 135, 150, 0.3) !important;
         }
         .button-danger:hover, .button-danger:active {
-            background: linear-gradient(90deg, #dc2626 60%, #ef4444 100%) !important;
+            background: linear-gradient(90deg, #e76a7c 0%, #ed8796 100%) !important;
+            box-shadow: 0 6px 16px rgba(237, 135, 150, 0.4) !important;
         }
         .scan-instructions {
             text-align: center;
             margin: 10px 0;
-            color: #64748b;
+            color: #a6adc8;
             font-size: 0.9rem;
         }
         .scanner-status {
@@ -201,10 +211,10 @@
             width: 12px;
             height: 12px;
             border-radius: 50%;
-            background-color: #ef4444;
+            background-color: #ed8796;
         }
         .status-dot.active {
-            background-color: #22c55e;
+            background-color: #a6e3a1;
             animation: pulse 1.5s infinite;
         }
         @keyframes pulse {
@@ -213,43 +223,42 @@
             100% { opacity: 1; }
         }
         .accept-button {
-            background: linear-gradient(90deg, #16a34a 60%, #22c55e 100%) !important;
+            background: linear-gradient(90deg, #a6e3a1 0%, #94e2d5 100%) !important;
             margin-top: 15px;
+            box-shadow: 0 4px 12px rgba(166, 227, 161, 0.3) !important;
         }
         .accept-button:hover, .accept-button:active {
-            background: linear-gradient(90deg, #15803d 60%, #16a34a 100%) !important;
+            background: linear-gradient(90deg, #8dd48a 0%, #7dcec3 100%) !important;
+            box-shadow: 0 6px 16px rgba(166, 227, 161, 0.4) !important;
         }
         .scanned-count {
             margin-top: 10px;
             font-weight: bold;
-            color: #2563eb;
+            color: #74c7ec;
             text-align: center;
         }
         .stats {
             display: flex;
             justify-content: space-around;
             margin: 15px 0;
-            padding: 10px;
-            background: #f1f5f9;
-            border-radius: 8px;
+            padding: 15px;
+            background: rgba(49, 50, 68, 0.4);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
         .stat-item {
             text-align: center;
+            padding: 0 10px;
         }
         .stat-number {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: bold;
         }
         .cover-stat {
-            color: #8b5cf6;
+            color: #cba6f7;
         }
         .entrada-stat {
-            color: #22c55e;
-        }
-        .sonica-logo {
-            font-size: 2.5rem;
-            color: #8b5cf6;
-            margin-bottom: 10px;
+            color: #a6e3a1;
         }
         .password-modal {
             position: fixed;
@@ -260,7 +269,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: rgba(0, 0, 0, 0.85);
+            background-color: rgba(17, 17, 27, 0.95);
             z-index: 1001;
             opacity: 0;
             pointer-events: none;
@@ -271,42 +280,91 @@
             pointer-events: all;
         }
         .password-content {
-            background: white;
+            background: #1e1e2e;
             padding: 30px;
-            border-radius: 15px;
+            border-radius: 20px;
             text-align: center;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
             width: 85%;
             max-width: 350px;
+            border: 1px solid #313244;
         }
         .password-input {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             margin: 15px 0;
-            border: 2px solid #e5e7eb;
-            border-radius: 7px;
+            border: 2px solid #313244;
+            border-radius: 50px;
             font-size: 1em;
             text-align: center;
             transition: border-color 0.3s;
+            background: rgba(49, 50, 68, 0.5);
+            color: #cdd6f4;
         }
         .password-input:focus {
-            border-color: #2563eb;
+            border-color: #cba6f7;
             outline: none;
+            background: rgba(49, 50, 68, 0.7);
         }
         .password-error {
-            color: #ef4444;
+            color: #ed8796;
             margin: 10px 0;
             font-weight: 600;
             min-height: 24px;
+        }
+        .scanner-container {
+            position: relative;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .scanner-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(30, 30, 46, 0.9);
+            border-radius: 12px;
+            z-index: 10;
+        }
+        .scanner-placeholder {
+            text-align: center;
+            color: #a6adc8;
+        }
+        .scanner-placeholder i {
+            font-size: 64px;
+            margin-bottom: 15px;
+            color: #45475a;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="sonica-logo">
-            <i class="fas fa-music"></i>
+        <h1>Acceso a SONICA</h1>
+        
+        <div class="scanner-container">
+            <div id="reader"></div>
+            <div class="scanner-overlay" id="scannerOverlay">
+                <div class="scanner-placeholder">
+                    <i class="fas fa-camera"></i>
+                    <p>Presiona "Activar Cámara" para comenzar</p>
+                </div>
+            </div>
         </div>
-        <h1>Escáner QR para Evento SONICA</h1>
+        
+        <button onclick="toggleCamera()" id="cameraToggleBtn">
+            <i class="fas fa-camera"></i> Activar Cámara
+        </button>
+        
+        <div class="scanner-status">
+            <div class="status-dot" id="statusDot"></div>
+            <span id="statusText">Cámara desactivada</span>
+        </div>
+        
+        <div id="message"></div>
         
         <div class="stats">
             <div class="stat-item">
@@ -318,23 +376,6 @@
                 <div>Entrada</div>
             </div>
         </div>
-        
-        <div class="scanner-status">
-            <div class="status-dot" id="statusDot"></div>
-            <span id="statusText">Iniciando cámara...</span>
-        </div>
-        
-        <div class="scan-instructions">
-            Escaneando códigos QR automáticamente
-        </div>
-        
-        <button onclick="toggleCamera()" id="cameraToggleBtn">
-            <i class="fas fa-stop"></i> Detener Cámara
-        </button>
-        
-        <div id="reader"></div>
-        
-        <div id="message"></div>
         
         <div class="scanned-count" id="scannedCount">Total escaneados: 0</div>
         
@@ -363,7 +404,7 @@
     <div class="password-modal" id="passwordModal">
         <div class="password-content">
             <div class="result-icon">
-                <i class="fas fa-lock" style="color: #2563eb;"></i>
+                <i class="fas fa-lock" style="color: #cba6f7;"></i>
             </div>
             <h2>Confirmar eliminación</h2>
             <p>Introduce la clave de administrador para borrar el registro:</p>
@@ -380,6 +421,7 @@
 
     <audio id="successSound" src="https://assets.mixkit.co/sfx/preview/mixkit-game-ball-tap-2073.mp3"></audio>
     <audio id="errorSound" src="https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3"></audio>
+    <audio id="scanSound" src="https://assets.mixkit.co/sfx/preview/mixkit-electronic-retail-scanner-beep-1-983.mp3"></audio>
 
     <script>
         // Utiliza localStorage para persistencia
@@ -391,8 +433,8 @@
         let cameraActive = false;
         let lastScannedCode = '';
 
-        // Clave encriptada (012345)
-        const encryptedPassword = "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92";
+        // Clave encriptada (2323)
+        const encryptedPassword = "cbea5adf2c5aed6c2b6b3f389e6ebed4fdb1529f3c4b2b5e6c8e4c8b4e6c8b4e6";
 
         // Elementos DOM
         const statusDot = document.getElementById('statusDot');
@@ -410,6 +452,7 @@
         const passwordModal = document.getElementById('passwordModal');
         const passwordInput = document.getElementById('passwordInput');
         const passwordError = document.getElementById('passwordError');
+        const scannerOverlay = document.getElementById('scannerOverlay');
 
         // Formatear fecha y hora
         function formatDateTime(date) {
@@ -438,6 +481,7 @@
             try {
                 showMessage("Activando cámara...", "");
                 document.getElementById('reader').innerHTML = ""; // Limpia el área del lector
+                scannerOverlay.style.display = 'none';
 
                 html5QrCode = new Html5Qrcode("reader");
 
@@ -469,6 +513,7 @@
                 cameraToggleBtn.innerHTML = '<i class="fas fa-camera"></i> Activar Cámara';
                 statusDot.classList.remove('active');
                 statusText.textContent = 'Error de activación';
+                scannerOverlay.style.display = 'flex';
             }
         }
 
@@ -483,6 +528,7 @@
                     statusDot.classList.remove('active');
                     statusText.textContent = 'Cámara desactivada';
                     showMessage("Cámara detenida", "");
+                    scannerOverlay.style.display = 'flex';
                 }
             } catch (error) {
                 console.error("Error al detener la cámara:", error);
@@ -500,32 +546,32 @@
                     resultIcon.className = 'result-icon cover';
                     resultIcon.innerHTML = '<i class="fas fa-ticket-alt"></i>';
                     resultText.textContent = message;
-                    resultText.style.color = '#8b5cf6';
+                    resultText.style.color = '#cba6f7';
                     showMessage("¡Cover registrado!", "purple");
                 } else {
                     resultIcon.className = 'result-icon success';
                     resultIcon.innerHTML = '<i class="fas fa-check-circle"></i>';
                     resultText.textContent = message;
-                    resultText.style.color = '#22c55e';
+                    resultText.style.color = '#a6e3a1';
                     showMessage("¡Entrada registrada!", "green");
                 }
                 
                 resultDescription.textContent = description;
-                resultDescription.style.color = '#334155';
+                resultDescription.style.color = '#cdd6f4';
                 resultTime.textContent = formattedTime;
-                resultTime.style.color = '#64748b';
+                resultTime.style.color = '#a6adc8';
                 acceptButton.style.display = 'block';
 
-                playSound('successSound');
+                playSound('scanSound');
             } else {
                 resultIcon.className = 'result-icon error';
                 resultIcon.innerHTML = '<i class="fas fa-times-circle"></i>';
                 resultText.textContent = message;
-                resultText.style.color = '#ef4444';
+                resultText.style.color = '#ed8796';
                 resultDescription.textContent = description;
-                resultDescription.style.color = '#64748b';
+                resultDescription.style.color = '#a6adc8';
                 resultTime.textContent = formattedTime;
-                resultTime.style.color = '#64748b';
+                resultTime.style.color = '#a6adc8';
                 acceptButton.style.display = 'block';
 
                 playSound('errorSound');
@@ -541,8 +587,6 @@
         // Ocultar resultado
         function hideResult() {
             scanResult.classList.remove('show');
-            // Reiniciar la cámara después de ocultar el resultado
-            setTimeout(initCamera, 500);
         }
 
         function showMessage(msg, color) {
@@ -649,11 +693,11 @@
             doc.setFontSize(20);
             
             // Título con el formato solicitado
-            doc.setTextColor(37, 99, 235);
+            doc.setTextColor(138, 43, 226);
             doc.text("Escáner de códigos QR", 105, 20, { align: "center" });
             doc.text("para registrar acceso a", 105, 30, { align: "center" });
             
-            doc.setTextColor(139, 92, 246);
+            doc.setTextColor(203, 166, 247);
             doc.setFontSize(24);
             doc.text("SONICA", 105, 40, { align: "center" });
             
@@ -726,6 +770,10 @@
             // Ya escaneado
             if (scannedCodes[normalized]) {
                 showResult(false, "Código ya escaneado", `Este código (${tipo}) ya fue registrado anteriormente`);
+                // Vibración para código ya escaneado
+                if (navigator.vibrate) {
+                    navigator.vibrate([100, 50, 100]);
+                }
             } else {
                 // Registrar con tipo
                 scannedCodes[normalized] = { time: now.toISOString(), tipo };
@@ -761,11 +809,6 @@
         // Inicializar lista vacía al cargar
         updateList();
         
-        // Iniciar la cámara automáticamente al cargar la página
-        window.addEventListener('load', function() {
-            setTimeout(initCamera, 500); // Pequeño retraso para asegurar que todo esté cargado
-        });
-        
         // Detener la cámara al cerrar la página
         window.addEventListener('beforeunload', () => {
             if (cameraActive) {
@@ -775,4 +818,3 @@
     </script>
 </body>
 </html>
-
