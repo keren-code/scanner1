@@ -220,7 +220,7 @@
         @keyframes pulse {
             0% { opacity: 1; }
             50% { opacity: 0.5; }
-            100% { opacity: 1; }
+           100% { opacity: 1; }
         }
         .accept-button {
             background: linear-gradient(90deg, #a6e3a1 0%, #94e2d5 100%) !important;
@@ -432,9 +432,6 @@
         let html5QrCode = null;
         let cameraActive = false;
         let lastScannedCode = '';
-
-        // Clave encriptada (2323)
-        const encryptedPassword = "cbea5adf2c5aed6c2b6b3f389e6ebed4fdb1529f3c4b2b5e6c8e4c8b4e6c8b4e6";
 
         // Elementos DOM
         const statusDot = document.getElementById('statusDot');
@@ -663,10 +660,8 @@
                 return;
             }
             
-            // Encriptar la entrada y comparar con la clave encriptada
-            const hashedInput = CryptoJS.SHA256(input).toString();
-            
-            if (hashedInput === encryptedPassword) {
+            // Verificar la contraseña directamente (2323)
+            if (input === "2323") {
                 // Contraseña correcta - borrar registro
                 scannedCodes = {};
                 scannedArr = [];
