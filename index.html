@@ -16,11 +16,11 @@
         }
         body {
             font-family: 'Poppins', sans-serif;
-            background: #ffffff;
+            background: #f7faff;
             margin: 0;
             padding: 0;
             min-height: 100vh;
-            color: #333;
+            color: #222;
             touch-action: manipulation;
             display: flex;
             flex-direction: column;
@@ -31,17 +31,17 @@
         .container {
             width: 100%;
             max-width: 500px;
-            background: #ffffff;
+            background: #fffbe7;
             border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 180, 216, 0.08);
             padding: 25px;
             text-align: center;
-            border: 1px solid #e0e0e0;
+            border: 1px solid #ffe29a;
             overflow: hidden;
             position: relative;
         }
         h1 {
-            background: linear-gradient(90deg, #6A0DAD 0%, #8A2BE2 100%);
+            background: linear-gradient(90deg, #00b4d8 0%, #ffb703 100%);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -50,10 +50,10 @@
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 1px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            text-shadow: 2px 2px 4px rgba(0, 180, 216, 0.08);
         }
         button {
-            background: linear-gradient(90deg, #6A0DAD 0%, #8A2BE2 100%);
+            background: linear-gradient(90deg, #00b4d8 0%, #ffb703 100%);
             color: #fff;
             border: none;
             border-radius: 12px;
@@ -63,28 +63,28 @@
             cursor: pointer;
             margin: 12px 0;
             transition: all 0.3s;
-            box-shadow: 0 5px 15px rgba(106, 13, 173, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 180, 216, 0.15);
             width: 100%;
             touch-action: manipulation;
             letter-spacing: 0.5px;
         }
         button:hover, button:active {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(106, 13, 173, 0.4);
+            box-shadow: 0 8px 20px rgba(255, 183, 3, 0.18);
         }
         #reader {
             width: 100% !important;
             margin: 0 auto 20px auto;
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-            background: #f5f5f5;
+            box-shadow: 0 8px 20px rgba(0, 180, 216, 0.08);
+            background: #e0f7fa;
             min-height: 280px;
             position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 2px dashed #6A0DAD;
+            border: 2px dashed #00b4d8;
         }
         #message {
             font-size: 1.1em;
@@ -94,32 +94,32 @@
             padding: 12px;
             border-radius: 12px;
             min-height: 20px;
-            background: #f9f9f9;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            background: #fffde4;
+            box-shadow: 0 4px 10px rgba(0, 180, 216, 0.05);
         }
         #message.red {
             color: #fff;
-            background: #F44336;
-            border: 2px solid #D32F2F;
+            background: #ff595e;
+            border: 2px solid #ff595e;
         }
         #message.green {
             color: #fff;
-            background: #4CAF50;
-            border: 2px solid #388E3C;
+            background: #43aa8b;
+            border: 2px solid #43aa8b;
         }
         #message.purple {
             color: #fff;
-            background: #6A0DAD;
-            border: 2px solid #4A148C;
+            background: #4361ee;
+            border: 2px solid #4361ee;
         }
         #scanned-list {
             margin-top: 20px;
-            background: #f9f9f9;
+            background: #e0f7fa;
             border-radius: 12px;
             padding: 15px;
             font-size: 0.95em;
             min-height: 40px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 5px 15px rgba(0, 180, 216, 0.05);
             max-height: 200px;
             overflow-y: auto;
         }
@@ -127,7 +127,7 @@
             display: flex;
             justify-content: space-between;
             padding: 10px 0;
-            border-bottom: 2px dashed rgba(106, 13, 173, 0.2);
+            border-bottom: 2px dashed #ffd166;
         }
         .scan-item:last-child {
             border-bottom: none;
@@ -136,10 +136,10 @@
             font-weight: bold;
         }
         .cover-code {
-            color: #6A0DAD;
+            color: #00b4d8;
         }
         .entrada-code {
-            color: #4CAF50;
+            color: #ffb703;
         }
         .scan-time {
             color: #666;
@@ -155,7 +155,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: rgba(0, 0, 0, 0.85);
+            background-color: rgba(0, 180, 216, 0.85);
             z-index: 1000;
             opacity: 0;
             pointer-events: none;
@@ -166,17 +166,17 @@
             pointer-events: all;
         }
         .result-content {
-            background: #ffffff;
+            background: #fffbe7;
             padding: 30px;
             border-radius: 20px;
             text-align: center;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 180, 216, 0.18);
             transform: scale(0.9);
             transition: transform 0.3s ease;
             width: 85%;
             max-width: 350px;
-            border: 2px solid #e0e0e0;
-            color: #333;
+            border: 2px solid #ffe29a;
+            color: #222;
         }
         .scan-result.show .result-content {
             transform: scale(1);
@@ -186,21 +186,21 @@
             margin-bottom: 20px;
         }
         .success {
-            color: #4CAF50;
+            color: #43aa8b;
         }
         .error {
-            color: #F44336;
+            color: #ff595e;
         }
         .cover {
-            color: #6A0DAD;
+            color: #00b4d8;
         }
         .button-danger {
-            background: linear-gradient(90deg, #F44336 0%, #EF5350 100%) !important;
-            box-shadow: 0 5px 15px rgba(244, 67, 54, 0.3) !important;
+            background: linear-gradient(90deg, #ff595e 0%, #ffd166 100%) !important;
+            box-shadow: 0 5px 15px rgba(255, 89, 94, 0.15) !important;
         }
         .button-danger:hover, .button-danger:active {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(244, 67, 54, 0.4) !important;
+            box-shadow: 0 8px 20px rgba(255, 89, 94, 0.18) !important;
         }
         .scanner-status {
             display: flex;
@@ -213,12 +213,12 @@
             width: 15px;
             height: 15px;
             border-radius: 50%;
-            background-color: #F44336;
-            box-shadow: 0 0 10px rgba(244, 67, 54, 0.5);
+            background-color: #ff595e;
+            box-shadow: 0 0 10px rgba(255, 89, 94, 0.5);
         }
         .status-dot.active {
-            background-color: #4CAF50;
-            box-shadow: 0 0 15px rgba(76, 175, 80, 0.7);
+            background-color: #43aa8b;
+            box-shadow: 0 0 15px rgba(67, 170, 139, 0.7);
             animation: pulse 1.5s infinite;
         }
         @keyframes pulse {
@@ -227,30 +227,30 @@
             100% { transform: scale(1); }
         }
         .accept-button {
-            background: linear-gradient(90deg, #4CAF50 0%, #66BB6A 100%) !important;
+            background: linear-gradient(90deg, #43aa8b 0%, #ffd166 100%) !important;
             margin-top: 20px;
-            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3) !important;
+            box-shadow: 0 5px 15px rgba(67, 170, 139, 0.15) !important;
         }
         .accept-button:hover, .accept-button:active {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.4) !important;
+            box-shadow: 0 8px 20px rgba(67, 170, 139, 0.18) !important;
         }
         .scanned-count {
             margin-top: 15px;
             font-weight: bold;
-            color: #6A0DAD;
+            color: #00b4d8;
             text-align: center;
             font-size: 1.1em;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            text-shadow: 1px 1px 2px rgba(0, 180, 216, 0.08);
         }
         .stats {
             display: flex;
             justify-content: space-around;
             margin: 20px 0;
             padding: 20px;
-            background: #f9f9f9;
+            background: #fffde4;
             border-radius: 16px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 5px 15px rgba(0, 180, 216, 0.05);
         }
         .stat-item {
             text-align: center;
@@ -261,12 +261,12 @@
             font-weight: 800;
         }
         .cover-stat {
-            color: #6A0DAD;
-            text-shadow: 2px 2px 4px rgba(106, 13, 173, 0.2);
+            color: #00b4d8;
+            text-shadow: 2px 2px 4px rgba(0, 180, 216, 0.12);
         }
         .entrada-stat {
-            color: #4CAF50;
-            text-shadow: 2px 2px 4px rgba(76, 175, 80, 0.2);
+            color: #ffb703;
+            text-shadow: 2px 2px 4px rgba(255, 183, 3, 0.12);
         }
         .password-modal {
             position: fixed;
@@ -277,7 +277,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: rgba(0, 0, 0, 0.85);
+            background-color: rgba(0, 180, 216, 0.85);
             z-index: 1001;
             opacity: 0;
             pointer-events: none;
@@ -288,40 +288,40 @@
             pointer-events: all;
         }
         .password-content {
-            background: #ffffff;
+            background: #fffbe7;
             padding: 30px;
             border-radius: 20px;
             text-align: center;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 180, 216, 0.18);
             width: 85%;
             max-width: 350px;
-            border: 2px solid #e0e0e0;
-            color: #333;
+            border: 2px solid #ffe29a;
+            color: #222;
         }
         .password-input {
             width: 100%;
             padding: 16px;
             margin: 20px 0;
-            border: 2px solid #e0e0e0;
+            border: 2px solid #ffe29a;
             border-radius: 12px;
             font-size: 1.1em;
             text-align: center;
             transition: all 0.3s;
-            background: #f9f9f9;
-            color: #333;
+            background: #fffde4;
+            color: #222;
             font-weight: 600;
         }
         .password-input:focus {
-            border-color: #6A0DAD;
+            border-color: #00b4d8;
             outline: none;
             background: #fff;
-            box-shadow: 0 0 15px rgba(106, 13, 173, 0.3);
+            box-shadow: 0 0 15px rgba(0, 180, 216, 0.13);
         }
         .password-input::placeholder {
             color: #999;
         }
         .password-error {
-            color: #F44336;
+            color: #ff595e;
             margin: 15px 0;
             font-weight: 700;
             min-height: 24px;
@@ -340,7 +340,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(106, 13, 173, 0.9);
+            background: rgba(0, 180, 216, 0.9);
             border-radius: 16px;
             z-index: 10;
             color: white;
@@ -351,7 +351,7 @@
         .scanner-placeholder i {
             font-size: 70px;
             margin-bottom: 20px;
-            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            text-shadow: 0 5px 15px rgba(0, 180, 216, 0.18);
         }
         .scanner-placeholder p {
             font-weight: 600;
@@ -436,10 +436,6 @@
             </button>
         </div>
     </div>
-
-    <audio id="successSound" src="https://assets.mixkit.co/sfx/preview/mixkit-game-ball-tap-2073.mp3"></audio>
-    <audio id="errorSound" src="https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3"></audio>
-    <audio id="scanSound" src="https://assets.mixkit.co/sfx/preview/mixkit-electronic-retail-scanner-beep-1-983.mp3"></audio>
 
     <script>
         // Utiliza localStorage para persistencia
@@ -561,35 +557,30 @@
                     resultIcon.className = 'result-icon cover';
                     resultIcon.innerHTML = '<i class="fas fa-ticket-alt"></i>';
                     resultText.textContent = message;
-                    resultText.style.color = '#6A0DAD';
+                    resultText.style.color = '#00b4d8';
                     showMessage("¡Cover registrado!", "purple");
                 } else {
                     resultIcon.className = 'result-icon success';
                     resultIcon.innerHTML = '<i class="fas fa-check-circle"></i>';
                     resultText.textContent = message;
-                    resultText.style.color = '#4CAF50';
+                    resultText.style.color = '#43aa8b';
                     showMessage("¡Entrada registrada!", "green");
                 }
-                
                 resultDescription.textContent = description;
-                resultDescription.style.color = '#333';
+                resultDescription.style.color = '#222';
                 resultTime.textContent = formattedTime;
                 resultTime.style.color = '#666';
                 acceptButton.style.display = 'block';
-
-                playSound('scanSound');
             } else {
                 resultIcon.className = 'result-icon error';
                 resultIcon.innerHTML = '<i class="fas fa-times-circle"></i>';
                 resultText.textContent = message;
-                resultText.style.color = '#F44336';
+                resultText.style.color = '#ff595e';
                 resultDescription.textContent = description;
-                resultDescription.style.color = '#333';
+                resultDescription.style.color = '#222';
                 resultTime.textContent = formattedTime;
                 resultTime.style.color = '#666';
                 acceptButton.style.display = 'block';
-
-                playSound('errorSound');
                 if (navigator.vibrate) {
                     navigator.vibrate(300);
                 }
@@ -608,12 +599,6 @@
             const el = document.getElementById('message');
             el.textContent = msg;
             el.className = color ? color : '';
-        }
-
-        function playSound(id) {
-            const audio = document.getElementById(id);
-            audio.currentTime = 0;
-            audio.play().catch(e => console.log("Error reproduciendo sonido:", e));
         }
 
         function updateList() {
@@ -672,25 +657,18 @@
         // Verificar la contraseña
         function verifyPassword() {
             const input = passwordInput.value.trim();
-            
             if (!input) {
                 passwordError.textContent = "Por favor, introduce la clave";
                 return;
             }
-            
-            // Verificar la contraseña directamente (2323)
             if (input === "2323") {
-                // Contraseña correcta - borrar registro
                 scannedCodes = {};
                 scannedArr = [];
                 updateList();
                 showMessage("Registros borrados", "");
                 hidePasswordModal();
-                playSound('successSound');
             } else {
-                // Contraseña incorrecta
                 passwordError.textContent = "Clave incorrecta";
-                playSound('errorSound');
                 if (navigator.vibrate) {
                     navigator.vibrate(300);
                 }
@@ -700,26 +678,24 @@
         function exportPDF() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-            
-            // Añadir fuente
+
+            // Título
             doc.setFont("helvetica", "bold");
             doc.setFontSize(20);
-            
-            // Título con el formato solicitado
-            doc.setTextColor(106, 13, 173);
+            doc.setTextColor(0, 180, 216);
             doc.text("Escáner de códigos QR", 105, 20, { align: "center" });
             doc.text("para registro de acceso", 105, 30, { align: "center" });
-            
-            doc.setTextColor(76, 175, 80);
+
+            doc.setTextColor(255, 183, 3);
             doc.setFontSize(24);
             doc.text("SOCIAL", 105, 40, { align: "center" });
-            
-            // Información de fecha y estadísticas
+
+            // Fecha y estadísticas
             doc.setFontSize(12);
             doc.setTextColor(0, 0, 0);
             doc.setFont("helvetica", "normal");
             doc.text(`Fecha de exportación: ${formatDateTime(new Date())}`, 105, 50, { align: "center" });
-            
+
             // Estadísticas
             let coverCounter = 0;
             let entradaCounter = 0;
@@ -727,36 +703,63 @@
                 if (item.tipo === 'COVER') coverCounter++;
                 if (item.tipo === 'ENTRADA') entradaCounter++;
             });
-            
-            doc.setTextColor(106, 13, 173);
+
+            doc.setTextColor(0, 180, 216);
             doc.text(`Covers: ${coverCounter}`, 50, 60);
-            doc.setTextColor(76, 175, 80);
+            doc.setTextColor(255, 183, 3);
             doc.text(`Entradas: ${entradaCounter}`, 150, 60);
-            
+
             doc.setTextColor(0, 0, 0);
             doc.text(`Total: ${scannedArr.length}`, 105, 70, { align: "center" });
-            
-            // Lista de códigos escaneados
+
+            // Tabla de registros
             doc.setFont("helvetica", "bold");
-            doc.setFontSize(14);
+            doc.setFontSize(13);
+            doc.setTextColor(0, 0, 0);
             doc.text("Registro de Códigos Escaneados", 105, 80, { align: "center" });
+
+            // Encabezado tabla
+            doc.setFontSize(11);
+            doc.setFont("helvetica", "bold");
+            doc.setFillColor(0, 180, 216);
+            doc.setTextColor(255,255,255);
+            doc.rect(10, 88, 190, 8, 'F');
+            doc.text("N°", 14, 94);
+            doc.text("Código", 28, 94);
+            doc.text("Tipo", 100, 94);
+            doc.text("Fecha y Hora", 130, 94);
+
+            let yPosition = 102;
             doc.setFont("helvetica", "normal");
-            doc.setFontSize(10);
-            
-            let yPosition = 90;
             scannedArr.forEach((item, i) => {
                 if (yPosition > 270) {
                     doc.addPage();
                     yPosition = 20;
+                    // Repetir encabezado en nueva página
+                    doc.setFont("helvetica", "bold");
+                    doc.setFillColor(0, 180, 216);
+                    doc.setTextColor(255,255,255);
+                    doc.rect(10, yPosition-2, 190, 8, 'F');
+                    doc.text("N°", 14, yPosition+4);
+                    doc.text("Código", 28, yPosition+4);
+                    doc.text("Tipo", 100, yPosition+4);
+                    doc.text("Fecha y Hora", 130, yPosition+4);
+                    yPosition += 10;
+                    doc.setFont("helvetica", "normal");
                 }
-                
-                doc.setTextColor(item.tipo === 'COVER' ? [106, 13, 173] : [76, 175, 80]);
-                doc.text(`${i+1}. ${item.code} - ${item.tipo}`, 10, yPosition);
+                // Alternar color de fondo filas
+                if (i % 2 === 0) {
+                    doc.setFillColor(255, 243, 205);
+                    doc.rect(10, yPosition-4, 190, 8, 'F');
+                }
                 doc.setTextColor(0, 0, 0);
-                doc.text(`${formatDateTime(new Date(item.time))}`, 80, yPosition);
+                doc.text(`${i+1}`, 14, yPosition);
+                doc.text(`${item.code}`, 28, yPosition);
+                doc.text(`${item.tipo}`, 100, yPosition);
+                doc.text(`${formatDateTime(new Date(item.time))}`, 130, yPosition);
                 yPosition += 8;
             });
-            
+
             doc.save("registro_qr_social_escaneos.pdf");
             showMessage("PDF exportado correctamente", "green");
         }
