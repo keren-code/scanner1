@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Escáner QR con Registro Completo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background: linear-gradient(135deg, #e0e7ff 0%, #f0fdfa 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            color: #22223b;
+            touch-action: manipulation;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 4px 24px rgba(30, 41, 59, 0.10);
+            padding: 25px 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #2563eb;
+            margin: 0 0 20px 0;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        .range-inputs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .range-inputs label {
+            font-weight: 500;
+            color: #334155;
+            font-size: 0.9rem;
+        }
+        .range-inputs input {
+            width: 70px;
+            padding: 8px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 1em;
+        }
+        button {
+            background: linear-gradient(90deg, #2563eb 60%, #22d3ee 100%);
+            color: #fff;
+            border: none;
+            border-radius: 7px;
+            padding: 12px 20px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 8px 0;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(37,99,235,0.08);
+            width: 100%;
+            touch-action: manipulation;
+        }
+        button:hover, button:active {
+            background: linear-gradient(90deg, #1e40af 60%, #06b6d4 100%);
+            transform: translateY(-2px);
+        }
+        #reader {
+            width: 100% !important;
+            margin: 0 auto 15px auto;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(30, 41, 59, 0.10);
+            background: #f1f5f9;
+            min-height: 250px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #message {
+            font-size: 1.1em;
+            margin: 15px 0;
+            text-align: center;
+            font-weight: 600;
+            padding: 10px;
+            border-radius: 6px;
+            min-height: 28px;
+        }
+        #message.red {
+            color: #fff;
+            background: #ef4444;
+            border: 1px solid #b91c1c;
+        }
+        #message.green {
+            color: #fff;
+            background: #22c55e;
+            border: 1px solid #15803d;
+        }
+        #message.black {
+            color: #fff;
+            background: #4b5563;
+            border: 1px solid #374151;
+        }
+        #scanned-list {
+            margin-top: 18px;
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 1em;
+            min-height: 40px;
+            box-shadow: 0 1px 4px rgba(30, 41, 59, 0.06);
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .scan-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .scan-item:last-child {
+            border-bottom: none;
+        }
+        .scan-code {
+            font-weight: bold;
+            color: #2563eb;
+        }
+        .scan-time {
+            color: #64748b;
+            font-size: 0.85em;
+        }
+        .scan-result {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .scan-result.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .result-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            width: 85%;
+            max-width: 350px;
+        }
+        .scan-result.show .result-content {
+            transform: scale(1);
+        }
+        .result-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+        .success {
+            color: #22c55e;
+        }
+        .error {
+            color: #ef4444;
+        }
+        .button-danger {
+            background: linear-gradient(90deg, #ef4444 60%, #f87171 100%) !important;
+        }
+        .button-danger:hover, .button-danger:active {
+            background: linear-gradient(90deg, #dc2626 60%, #ef4444 100%) !important;
+        }
+        .scan-instructions {
+            text-align: center;
+            margin: 10px 0;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        .scanner-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #ef4444;
+        }
+        .status-dot.active {
+            background-color: #22c55e;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        .accept-button {
+            background: linear-gradient(90deg, #16a34a 60%, #22c55e 100%) !important;
+            margin-top: 15px;
+        }
+        .accept-button:hover, .accept-button:active {
+            background: linear-gradient(90deg, #15803d 60%, #16a34a 100%) !important;
+        }
+        .scanned-count {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #2563eb;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Escáner QR con Registro</h1>
+        
+        <div class="range-inputs">
+            <label>Desde: <input type="number" id="rangeStart" value="1" min="1" max="30"></label>
+            <label>Hasta: <input type="number" id="rangeEnd" value="30" min="1" max="30"></label>
+        </div>
+        
+        <div class="scanner-status">
+            <div class="status-dot" id="statusDot"></div>
+            <span id="statusText">Cámara desactivada</span>
+        </div>
+        
+        <div class="scan-instructions">
+            Escaneará automáticamente al activar la cámara
+        </div>
+        
+        <button onclick="toggleCamera()" id="cameraToggleBtn">
+            <i class="fas fa-camera"></i> Activar Cámara
+        </button>
+        
+        <div id="reader"></div>
+        
+        <div id="message"></div>
+        
+        <div class="scanned-count" id="scannedCount">Total escaneados: 0</div>
+        
+        <button onclick="exportPDF()">
+            <i class="fas fa-file-pdf"></i> Exportar a PDF
+        </button>
+        <button onclick="clearRegistro()" class="button-danger">
+            <i class="fas fa-trash"></i> Borrar registro
+        </button>
+        
+        <div id="scanned-list"></div>
+    </div>
+
+    <div class="scan-result" id="scanResult">
+        <div class="result-content">
+            <div class="result-icon" id="resultIcon"></div>
+            <h2 id="resultText">Resultado</h2>
+            <p id="resultDescription"></p>
+            <p id="resultTime"></p>
+            <button onclick="hideResult()" class="accept-button" id="acceptButton">
+                <i class="fas fa-check-circle"></i> Aceptar
+            </button>
+        </div>
+    </div>
+
+    <audio id="firstScanSound" src="https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3"></audio>
+    <audio id="successSound" src="https://assets.mixkit.co/sfx/preview/mixkit-game-ball-tap-2073.mp3"></audio>
+    <audio id="errorSound" src="https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3"></audio>
+
+    <script>
+        // Utiliza localStorage para persistencia
+        let scannedCodes = JSON.parse(localStorage.getItem('scannedCodes') || "{}");
+        let scannedArr = Object.keys(scannedCodes).map(code => {
+            return { code, time: scannedCodes[code] };
+        });
+        let rangeStart = 1, rangeEnd = 30;
+        let html5QrCode = null;
+        let cameraActive = false;
+        let lastScannedCode = '';
+
+        // Elementos DOM
+        const statusDot = document.getElementById('statusDot');
+        const statusText = document.getElementById('statusText');
+        const cameraToggleBtn = document.getElementById('cameraToggleBtn');
+        const scanResult = document.getElementById('scanResult');
+        const resultIcon = document.getElementById('resultIcon');
+        const resultText = document.getElementById('resultText');
+        const resultDescription = document.getElementById('resultDescription');
+        const resultTime = document.getElementById('resultTime');
+        const acceptButton = document.getElementById('acceptButton');
+        const scannedCount = document.getElementById('scannedCount');
+
+        // Inicializar valores de rango
+        document.getElementById('rangeStart').value = rangeStart;
+        document.getElementById('rangeEnd').value = rangeEnd;
+
+        // Formatear fecha y hora
+        function formatDateTime(date) {
+            const options = { 
+                year: 'numeric', 
+                month: '2-digit', 
+                day: '2-digit',
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit' 
+            };
+            return date.toLocaleString('es-ES', options);
+        }
+
+        // Alternar estado de la cámara
+        async function toggleCamera() {
+            if (cameraActive) {
+                await stopCamera();
+            } else {
+                await initCamera();
+            }
+        }
+
+        // Inicializar la cámara
+        async function initCamera() {
+            try {
+                showMessage("Activando cámara...", "");
+                
+                // Crear una nueva instancia del escáner
+                html5QrCode = new Html5Qrcode("reader");
+                
+                // Configuración para móviles
+                const config = { 
+                    fps: 10, 
+                    qrbox: { width: 250, height: 150 },
+                    aspectRatio: 1.0,
+                    focusMode: "continuous"
+                };
+                
+                // Iniciar el escáner
+                await html5QrCode.start(
+                    { facingMode: "environment" }, 
+                    config, 
+                    onScanSuccess, 
+                    onScanError
+                );
+                
+                cameraActive = true;
+                cameraToggleBtn.innerHTML = '<i class="fas fa-stop"></i> Detener Cámara';
+                statusDot.classList.add('active');
+                statusText.textContent = 'Escaneando...';
+                showMessage("Cámara activada. Escaneando...", "green");
+                
+            } catch (error) {
+                console.error("Error al iniciar la cámara:", error);
+                showMessage("Error al activar la cámara", "red");
+                cameraActive = false;
+                cameraToggleBtn.innerHTML = '<i class="fas fa-camera"></i> Activar Cámara';
+                statusDot.classList.remove('active');
+                statusText.textContent = 'Error de activación';
+            }
+        }
+
+        // Detener la cámara
+        async function stopCamera() {
+            try {
+                if (html5QrCode && cameraActive) {
+                    await html5QrCode.stop();
+                    html5QrCode.clear();
+                    cameraActive = false;
+                    cameraToggleBtn.innerHTML = '<i class="fas fa-camera"></i> Activar Cámara';
+                    statusDot.classList.remove('active');
+                    statusText.textContent = 'Cámara desactivada';
+                    showMessage("Cámara detenida", "");
+                }
+            } catch (error) {
+                console.error("Error al detener la cámara:", error);
+                showMessage("Error al detener la cámara", "red");
+            }
+        }
+
+        // Mostrar resultado del escaneo
+        function showResult(success, message, description, isFirstScan = false) {
+            const now = new Date();
+            const formattedTime = formatDateTime(now);
+            
+            if (success) {
+                resultIcon.className = 'result-icon success';
+                resultIcon.innerHTML = '<i class="fas fa-check-circle"></i>';
+                resultText.textContent = message;
+                resultText.style.color = '#22c55e';
+                resultDescription.textContent = description;
+                resultDescription.style.color = '#334155';
+                resultTime.textContent = formattedTime;
+                resultTime.style.color = '#64748b';
+                acceptButton.style.display = 'block';
+                
+                // Reproducir sonido específico para primer escaneo
+                playSound(isFirstScan ? 'firstScanSound' : 'successSound');
+            } else {
+                resultIcon.className = 'result-icon error';
+                resultIcon.innerHTML = '<i class="fas fa-times-circle"></i>';
+                resultText.textContent = message;
+                resultText.style.color = '#ef4444';
+                resultDescription.textContent = description;
+                resultDescription.style.color = '#64748b';
+                resultTime.textContent = formattedTime;
+                resultTime.style.color = '#64748b';
+                acceptButton.style.display = 'block';
+                
+                // Reproducir sonido de error
+                playSound('errorSound');
+                
+                // Vibrar en caso de error
+                if (navigator.vibrate) {
+                    navigator.vibrate(300);
+                }
+            }
+            
+            scanResult.classList.add('show');
+            
+            // Detener la cámara automáticamente
+            stopCamera();
+        }
+
+        // Ocultar resultado
+        function hideResult() {
+            scanResult.classList.remove('show');
+        }
+
+        function setRange() {
+            rangeStart = parseInt(document.getElementById('rangeStart').value);
+            rangeEnd = parseInt(document.getElementById('rangeEnd').value);
+            showMessage(`Rango actualizado: ${rangeStart} - ${rangeEnd}`, 'green');
+        }
+
+        function showMessage(msg, color) {
+            const el = document.getElementById('message');
+            el.textContent = msg;
+            el.className = color ? color : '';
+        }
+
+        function playSound(id) {
+            const audio = document.getElementById(id);
+            audio.currentTime = 0;
+            audio.play().catch(e => console.log("Error reproduciendo sonido:", e));
+        }
+
+        function updateList() {
+            const listElement = document.getElementById('scanned-list');
+            const countElement = document.getElementById('scannedCount');
+
+            if (scannedArr.length > 0) {
+                listElement.innerHTML = "<b>Registro de escaneos:</b>";
+                scannedArr.forEach(item => {
+                    const scanItem = document.createElement('div');
+                    scanItem.className = 'scan-item';
+                    scanItem.innerHTML = `
+                        <span class="scan-code">${item.code}</span>
+                        <span class="scan-time">${formatDateTime(new Date(item.time))}</span>
+                        <span style="font-size:0.9em;color:#22d3ee;font-weight:bold;">${item.tipo || ''}</span>
+                    `;
+                    listElement.appendChild(scanItem);
+                });
+            } else {
+                listElement.innerHTML = "<b>No hay códigos escaneados aún.</b>";
+            }
+
+            countElement.textContent = `Total escaneados: ${scannedArr.length}`;
+
+            // Actualiza localStorage
+            localStorage.setItem('scannedCodes', JSON.stringify(scannedCodes));
+        }
+
+        function clearRegistro() {
+            if (confirm("¿Seguro que deseas borrar todos los registros?")) {
+                scannedCodes = {};
+                scannedArr = [];
+                updateList();
+                showMessage("Registros borrados", "");
+            }
+        }
+
+        // Acepta "PASE LIBRE 001" en adelante
+        function isValidPaseLibre(code) {
+            const regex = /^PASE LIBRE (\d{1,3})$/i;
+            const match = code.trim().match(regex);
+            if (!match) return false;
+            const num = parseInt(match[1], 10);
+            return num >= rangeStart && num <= rangeEnd;
+        }
+
+        function exportPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(16);
+            doc.text("Registro de Códigos Escaneados", 10, 15);
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(12);
+            
+            let yPosition = 25;
+            scannedArr.forEach((item, i) => {
+                if (yPosition > 270) {
+                    doc.addPage();
+                    yPosition = 20;
+                }
+                doc.text(`${i+1}. ${item.code} - ${formatDateTime(new Date(item.time))}`, 10, yPosition);
+                yPosition += 8;
+            });
+            
+            doc.save("registro_escaneos.pdf");
+            showMessage("PDF exportado correctamente", "green");
+        }
+
+        function onScanSuccess(decodedText) {
+            // Evitar múltiples escaneos rápidos
+            if (decodedText === lastScannedCode) return;
+            lastScannedCode = decodedText;
+
+            const normalized = decodedText.trim().toUpperCase();
+            const now = new Date();
+
+            // Detectar tipo de código
+            let tipo = '';
+            if (/^PASE LIBRE (\d{1,3})$/i.test(normalized)) {
+                if (!isValidPaseLibre(decodedText)) {
+                    showResult(false, "Código no válido", "El formato debe ser: PASE LIBRE 001", false);
+                    return;
+                }
+                tipo = 'ENTRADA';
+            } else if (/COVER/i.test(normalized)) {
+                tipo = 'COVER';
+            } else if (/ENTRADA/i.test(normalized)) {
+                tipo = 'ENTRADA';
+            } else {
+                showResult(false, "Código no válido", "El formato debe ser: PASE LIBRE 001, COVER o ENTRADA", false);
+                return;
+            }
+
+            // Ya escaneado
+            if (scannedCodes[normalized]) {
+                showResult(false, "Código ya escaneado", `Este código (${tipo}) ya fue registrado anteriormente`, false);
+            } else {
+                // Registrar con tipo
+                scannedCodes[normalized] = { time: now.toISOString(), tipo };
+                scannedArr.push({ code: normalized, time: now.toISOString(), tipo });
+                showResult(true, `¡${tipo}! Ingresa`, `Código escaneado correctamente (${tipo})`, true);
+                updateList();
+            }
+        }
+
+        // Manejo de error de cámara
+        function onScanError(errorMessage) {
+            // No mostrar errores menores continuos
+            if (!errorMessage || errorMessage.includes('NotFoundException')) {
+                return;
+            }
+            
+            console.error("Error de escaneo:", errorMessage);
+            
+            if (errorMessage.includes('NotAllowedError')) {
+                showMessage("Permiso de cámara denegado", "red");
+            } else if (errorMessage.includes('NotFoundError') || errorMessage.includes('NotReadableError')) {
+                showMessage("Cámara no disponible", "red");
+            }
+        }
+
+        // Inicializar lista vacía al cargar
+        updateList();
+        
+        // Detener la cámara al cerrar la página
+        window.addEventListener('beforeunload', () => {
+            if (cameraActive) {
+                stopCamera();
+            }
+        });
+
+        // Actualizar rango cuando cambian los inputs
+        document.getElementById('rangeStart').addEventListener('change', setRange);
+        document.getElementById('rangeEnd').addEventListener('change', setRange);
+    </script>
+</body>
+</html>
