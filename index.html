@@ -7,7 +7,7 @@
     <script src="https://unpkg.com/html5-qrcode"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -15,12 +15,12 @@
             -webkit-tap-highlight-color: transparent;
         }
         body {
-            font-family: 'Open Sans', Arial, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #8A2BE2 0%, #FF6B6B 50%, #FFD166 100%);
             margin: 0;
             padding: 0;
             min-height: 100vh;
-            color: #f0f0f0;
+            color: #2D3047;
             touch-action: manipulation;
             display: flex;
             flex-direction: column;
@@ -31,97 +31,130 @@
         .container {
             width: 100%;
             max-width: 500px;
-            background: rgba(30, 30, 46, 0.9);
-            border-radius: 18px;
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
-            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            padding: 25px;
             text-align: center;
             backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            overflow: hidden;
+            position: relative;
+        }
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 8s infinite linear;
+            z-index: 0;
+        }
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
         }
         h1 {
-            color: #8a2be2;
-            margin: 0 0 15px 0;
-            font-size: 1.8rem;
-            font-weight: 700;
+            background: linear-gradient(90deg, #8A2BE2 0%, #FF6B6B 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin: 0 0 20px 0;
+            font-size: 2.2rem;
+            font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 1px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
         }
         button {
-            background: linear-gradient(90deg, #8a2be2 0%, #9370db 100%);
+            background: linear-gradient(90deg, #8A2BE2 0%, #FF6B6B 100%);
             color: #fff;
             border: none;
             border-radius: 50px;
-            padding: 14px 20px;
-            font-size: 1em;
-            font-weight: 600;
+            padding: 16px 25px;
+            font-size: 1.1em;
+            font-weight: 700;
             cursor: pointer;
-            margin: 10px 0;
+            margin: 12px 0;
             transition: all 0.3s;
-            box-shadow: 0 4px 12px rgba(138, 43, 226, 0.3);
+            box-shadow: 0 8px 20px rgba(138, 43, 226, 0.4);
             width: 100%;
             touch-action: manipulation;
+            position: relative;
+            z-index: 1;
+            letter-spacing: 0.5px;
         }
         button:hover, button:active {
-            background: linear-gradient(90deg, #7a1dd2 0%, #8360d1 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(138, 43, 226, 0.4);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(138, 43, 226, 0.5);
         }
         #reader {
             width: 100% !important;
-            margin: 0 auto 15px auto;
-            border-radius: 12px;
+            margin: 0 auto 20px auto;
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-            background: #1e1e2e;
-            min-height: 280px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            background: linear-gradient(145deg, #f0f0f0, #e6e6e6);
+            min-height: 300px;
             position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 2px solid #313244;
+            border: 3px dashed #8A2BE2;
+            position: relative;
+            z-index: 1;
         }
         #message {
-            font-size: 1em;
-            margin: 15px 0;
+            font-size: 1.1em;
+            margin: 20px 0;
             text-align: center;
             font-weight: 600;
-            padding: 10px;
-            border-radius: 8px;
+            padding: 12px;
+            border-radius: 12px;
             min-height: 20px;
-            background: rgba(49, 50, 68, 0.6);
+            background: rgba(255, 255, 255, 0.7);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
         }
         #message.red {
             color: #fff;
-            background: rgba(237, 135, 150, 0.3);
-            border: 1px solid #ed8796;
+            background: linear-gradient(90deg, #FF6B6B 0%, #FF8E8E 100%);
+            border: 2px solid #FF5252;
         }
         #message.green {
             color: #fff;
-            background: rgba(166, 227, 161, 0.3);
-            border: 1px solid #a6e3a1;
+            background: linear-gradient(90deg, #06D6A0 0%, #4EF4B8 100%);
+            border: 2px solid #00C897;
         }
         #message.purple {
             color: #fff;
-            background: rgba(203, 166, 247, 0.3);
-            border: 1px solid #cba6f7;
+            background: linear-gradient(90deg, #8A2BE2 0%, #A665F5 100%);
+            border: 2px solid #7B1FA2;
         }
         #scanned-list {
-            margin-top: 18px;
-            background: rgba(49, 50, 68, 0.4);
-            border-radius: 12px;
-            padding: 12px;
-            font-size: 0.9em;
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 16px;
+            padding: 15px;
+            font-size: 0.95em;
             min-height: 40px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             max-height: 200px;
             overflow-y: auto;
+            position: relative;
+            z-index: 1;
         }
         .scan-item {
             display: flex;
             justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(110, 115, 141, 0.3);
+            padding: 10px 0;
+            border-bottom: 2px dashed rgba(138, 43, 226, 0.2);
         }
         .scan-item:last-child {
             border-bottom: none;
@@ -130,14 +163,15 @@
             font-weight: bold;
         }
         .cover-code {
-            color: #cba6f7;
+            color: #8A2BE2;
         }
         .entrada-code {
-            color: #a6e3a1;
+            color: #06D6A0;
         }
         .scan-time {
-            color: #a6adc8;
-            font-size: 0.8em;
+            color: #FF6B6B;
+            font-size: 0.85em;
+            font-weight: 600;
         }
         .scan-result {
             position: fixed;
@@ -148,7 +182,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: rgba(17, 17, 27, 0.95);
+            background-color: rgba(45, 48, 71, 0.95);
             z-index: 1000;
             opacity: 0;
             pointer-events: none;
@@ -159,16 +193,17 @@
             pointer-events: all;
         }
         .result-content {
-            background: #1e1e2e;
-            padding: 30px;
-            border-radius: 20px;
+            background: linear-gradient(135deg, #8A2BE2 0%, #FF6B6B 100%);
+            padding: 35px;
+            border-radius: 25px;
             text-align: center;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
             transform: scale(0.9);
             transition: transform 0.3s ease;
             width: 85%;
             max-width: 350px;
-            border: 1px solid #313244;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
         }
         .scan-result.show .result-content {
             transform: scale(1);
@@ -176,89 +211,105 @@
         .result-icon {
             font-size: 80px;
             margin-bottom: 20px;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
         .success {
-            color: #a6e3a1;
+            color: #06D6A0;
         }
         .error {
-            color: #ed8796;
+            color: #FFD166;
         }
         .cover {
-            color: #cba6f7;
+            color: #8A2BE2;
         }
         .button-danger {
-            background: linear-gradient(90deg, #ed8796 0%, #f5a0b5 100%) !important;
-            box-shadow: 0 4px 12px rgba(237, 135, 150, 0.3) !important;
+            background: linear-gradient(90deg, #FF6B6B 0%, #FF8E8E 100%) !important;
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4) !important;
         }
         .button-danger:hover, .button-danger:active {
-            background: linear-gradient(90deg, #e76a7c 0%, #ed8796 100%) !important;
-            box-shadow: 0 6px 16px rgba(237, 135, 150, 0.4) !important;
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(255, 107, 107, 0.5) !important;
         }
         .scan-instructions {
             text-align: center;
-            margin: 10px 0;
-            color: #a6adc8;
-            font-size: 0.9rem;
+            margin: 15px 0;
+            color: #8A2BE2;
+            font-size: 1rem;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
         }
         .scanner-status {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            margin: 10px 0;
+            margin: 15px 0;
+            position: relative;
+            z-index: 1;
         }
         .status-dot {
-            width: 12px;
-            height: 12px;
+            width: 15px;
+            height: 15px;
             border-radius: 50%;
-            background-color: #ed8796;
+            background-color: #FF6B6B;
+            box-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
         }
         .status-dot.active {
-            background-color: #a6e3a1;
+            background-color: #06D6A0;
+            box-shadow: 0 0 15px rgba(6, 214, 160, 0.7);
             animation: pulse 1.5s infinite;
         }
         @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-           100% { opacity: 1; }
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
         }
         .accept-button {
-            background: linear-gradient(90deg, #a6e3a1 0%, #94e2d5 100%) !important;
-            margin-top: 15px;
-            box-shadow: 0 4px 12px rgba(166, 227, 161, 0.3) !important;
+            background: linear-gradient(90deg, #06D6A0 0%, #4EF4B8 100%) !important;
+            margin-top: 20px;
+            box-shadow: 0 8px 20px rgba(6, 214, 160, 0.4) !important;
         }
         .accept-button:hover, .accept-button:active {
-            background: linear-gradient(90deg, #8dd48a 0%, #7dcec3 100%) !important;
-            box-shadow: 0 6px 16px rgba(166, 227, 161, 0.4) !important;
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(6, 214, 160, 0.5) !important;
         }
         .scanned-count {
-            margin-top: 10px;
+            margin-top: 15px;
             font-weight: bold;
-            color: #74c7ec;
+            color: #8A2BE2;
             text-align: center;
+            font-size: 1.1em;
+            position: relative;
+            z-index: 1;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
         }
         .stats {
             display: flex;
             justify-content: space-around;
-            margin: 15px 0;
-            padding: 15px;
-            background: rgba(49, 50, 68, 0.4);
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
         }
         .stat-item {
             text-align: center;
-            padding: 0 10px;
+            padding: 0 15px;
         }
         .stat-number {
-            font-size: 1.8rem;
-            font-weight: bold;
+            font-size: 2rem;
+            font-weight: 800;
         }
         .cover-stat {
-            color: #cba6f7;
+            color: #8A2BE2;
+            text-shadow: 2px 2px 4px rgba(138, 43, 226, 0.2);
         }
         .entrada-stat {
-            color: #a6e3a1;
+            color: #06D6A0;
+            text-shadow: 2px 2px 4px rgba(6, 214, 160, 0.2);
         }
         .password-modal {
             position: fixed;
@@ -269,7 +320,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: rgba(17, 17, 27, 0.95);
+            background-color: rgba(45, 48, 71, 0.95);
             z-index: 1001;
             opacity: 0;
             pointer-events: none;
@@ -280,42 +331,49 @@
             pointer-events: all;
         }
         .password-content {
-            background: #1e1e2e;
-            padding: 30px;
-            border-radius: 20px;
+            background: linear-gradient(135deg, #8A2BE2 0%, #FF6B6B 100%);
+            padding: 35px;
+            border-radius: 25px;
             text-align: center;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
             width: 85%;
             max-width: 350px;
-            border: 1px solid #313244;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
         }
         .password-input {
             width: 100%;
-            padding: 14px;
-            margin: 15px 0;
-            border: 2px solid #313244;
+            padding: 16px;
+            margin: 20px 0;
+            border: 2px solid rgba(255, 255, 255, 0.5);
             border-radius: 50px;
-            font-size: 1em;
+            font-size: 1.1em;
             text-align: center;
-            transition: border-color 0.3s;
-            background: rgba(49, 50, 68, 0.5);
-            color: #cdd6f4;
+            transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-weight: 600;
         }
         .password-input:focus {
-            border-color: #cba6f7;
+            border-color: #FFD166;
             outline: none;
-            background: rgba(49, 50, 68, 0.7);
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 15px rgba(255, 209, 102, 0.5);
+        }
+        .password-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
         }
         .password-error {
-            color: #ed8796;
-            margin: 10px 0;
-            font-weight: 600;
+            color: #FFD166;
+            margin: 15px 0;
+            font-weight: 700;
             min-height: 24px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
         }
         .scanner-container {
             position: relative;
             width: 100%;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
         .scanner-overlay {
             position: absolute;
@@ -326,23 +384,39 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(30, 30, 46, 0.9);
-            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.9) 0%, rgba(255, 107, 107, 0.9) 100%);
+            border-radius: 20px;
             z-index: 10;
+            color: white;
         }
         .scanner-placeholder {
             text-align: center;
-            color: #a6adc8;
         }
         .scanner-placeholder i {
-            font-size: 64px;
+            font-size: 70px;
+            margin-bottom: 20px;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        .scanner-placeholder p {
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+        .logo {
+            font-size: 3rem;
             margin-bottom: 15px;
-            color: #45475a;
+            background: linear-gradient(90deg, #8A2BE2 0%, #FF6B6B 50%, #FFD166 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.2));
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="logo">
+            <i class="fas fa-music"></i>
+        </div>
         <h1>Acceso a SONICA</h1>
         
         <div class="scanner-container">
@@ -404,7 +478,7 @@
     <div class="password-modal" id="passwordModal">
         <div class="password-content">
             <div class="result-icon">
-                <i class="fas fa-lock" style="color: #cba6f7;"></i>
+                <i class="fas fa-lock"></i>
             </div>
             <h2>Confirmar eliminación</h2>
             <p>Introduce la clave de administrador para borrar el registro:</p>
@@ -413,7 +487,7 @@
             <button onclick="verifyPassword()" class="accept-button">
                 <i class="fas fa-check-circle"></i> Verificar
             </button>
-            <button onclick="hidePasswordModal()" class="button-danger" style="margin-top: 10px;">
+            <button onclick="hidePasswordModal()" class="button-danger" style="margin-top: 15px;">
                 <i class="fas fa-times-circle"></i> Cancelar
             </button>
         </div>
@@ -543,20 +617,20 @@
                     resultIcon.className = 'result-icon cover';
                     resultIcon.innerHTML = '<i class="fas fa-ticket-alt"></i>';
                     resultText.textContent = message;
-                    resultText.style.color = '#cba6f7';
+                    resultText.style.color = '#FFFFFF';
                     showMessage("¡Cover registrado!", "purple");
                 } else {
                     resultIcon.className = 'result-icon success';
                     resultIcon.innerHTML = '<i class="fas fa-check-circle"></i>';
                     resultText.textContent = message;
-                    resultText.style.color = '#a6e3a1';
+                    resultText.style.color = '#FFFFFF';
                     showMessage("¡Entrada registrada!", "green");
                 }
                 
                 resultDescription.textContent = description;
-                resultDescription.style.color = '#cdd6f4';
+                resultDescription.style.color = '#FFFFFF';
                 resultTime.textContent = formattedTime;
-                resultTime.style.color = '#a6adc8';
+                resultTime.style.color = '#FFD166';
                 acceptButton.style.display = 'block';
 
                 playSound('scanSound');
@@ -564,11 +638,11 @@
                 resultIcon.className = 'result-icon error';
                 resultIcon.innerHTML = '<i class="fas fa-times-circle"></i>';
                 resultText.textContent = message;
-                resultText.style.color = '#ed8796';
+                resultText.style.color = '#FFFFFF';
                 resultDescription.textContent = description;
-                resultDescription.style.color = '#a6adc8';
+                resultDescription.style.color = '#FFFFFF';
                 resultTime.textContent = formattedTime;
-                resultTime.style.color = '#a6adc8';
+                resultTime.style.color = '#FFD166';
                 acceptButton.style.display = 'block';
 
                 playSound('errorSound');
@@ -683,7 +757,7 @@
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
             
-            // Añadir Open Sans como fuente (jsPDF no soporta directamente Google Fonts, pero podemos usar normal)
+            // Añadir fuente
             doc.setFont("helvetica", "bold");
             doc.setFontSize(20);
             
@@ -692,7 +766,7 @@
             doc.text("Escáner de códigos QR", 105, 20, { align: "center" });
             doc.text("para registrar acceso a", 105, 30, { align: "center" });
             
-            doc.setTextColor(203, 166, 247);
+            doc.setTextColor(255, 107, 107);
             doc.setFontSize(24);
             doc.text("SONICA", 105, 40, { align: "center" });
             
@@ -710,9 +784,9 @@
                 if (item.tipo === 'ENTRADA') entradaCounter++;
             });
             
-            doc.setTextColor(139, 92, 246);
+            doc.setTextColor(138, 43, 226);
             doc.text(`Covers: ${coverCounter}`, 50, 60);
-            doc.setTextColor(34, 197, 94);
+            doc.setTextColor(6, 214, 160);
             doc.text(`Entradas: ${entradaCounter}`, 150, 60);
             
             doc.setTextColor(0, 0, 0);
@@ -732,7 +806,7 @@
                     yPosition = 20;
                 }
                 
-                doc.setTextColor(item.tipo === 'COVER' ? [139, 92, 246] : [34, 197, 94]);
+                doc.setTextColor(item.tipo === 'COVER' ? [138, 43, 226] : [6, 214, 160]);
                 doc.text(`${i+1}. ${item.code} - ${item.tipo}`, 10, yPosition);
                 doc.setTextColor(0, 0, 0);
                 doc.text(`${formatDateTime(new Date(item.time))}`, 80, yPosition);
