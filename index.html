@@ -93,6 +93,11 @@
             align-items: center;
             justify-content: center;
         }
+        #reader__dashboard_section_csr {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
         #message {
             font-size: 1.1em;
             margin: 15px 0;
@@ -235,6 +240,13 @@
             color: #2563eb;
             text-align: center;
         }
+        .camera-select {
+            margin: 10px 0;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -254,6 +266,10 @@
         <div class="scan-instructions">
             Escaneará automáticamente al activar la cámara
         </div>
+        
+        <select id="cameraSelect" class="camera-select" style="display: none;">
+            <option value="">Seleccionar cámara...</option>
+        </select>
         
         <button onclick="toggleCamera()" id="cameraToggleBtn">
             <i class="fas fa-camera"></i> Activar Cámara
@@ -287,7 +303,7 @@
         </div>
     </div>
 
-    <audio id="firstScanSound" src="scaner.mp3"></audio> <!-- Cambia aquí el audio -->
+    <audio id="firstScanSound" src="scaner.mp3"></audio>
     <audio id="successSound" src="https://assets.mixkit.co/sfx/preview/mixkit-game-ball-tap-2073.mp3"></audio>
     <audio id="errorSound" src="https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3"></audio>
 
@@ -301,12 +317,14 @@
         let html5QrCode = null;
         let cameraActive = false;
         let lastScannedCode = '';
-        let firstScanDone = false; // <-- Cambiado aquí
+        let firstScanDone = false;
+        let availableCameras = [];
 
         // Elementos DOM
         const statusDot = document.getElementById('statusDot');
         const statusText = document.getElementById('statusText');
         const cameraToggleBtn = document.getElementById('cameraToggleBtn');
+        const cameraSelect = document.getElementById('cameraSelect');
         const scanResult = document.getElementById('scanResult');
         const resultIcon = document.getElementById('resultIcon');
         const resultText = document.getElementById('resultText');
@@ -332,6 +350,27 @@
             return date.toLocaleString('es-ES', options);
         }
 
+        // Obtener cámaras disponibles
+        async function getCameras() {
+            try {
+                const devices = await Html5Qrcode.getCameras();
+                availableCameras = devices;
+                
+                if (devices && devices.length > 0) {
+                    cameraSelect.innerHTML = '<option value="">Seleccionar cámara...</option>';
+                    devices.forEach(device => {
+                        cameraSelect.innerHTML += `<option value="${device.id}">${device.label || `Cámara ${device.id}`}</option>`;
+                    });
+                    cameraSelect.style.display = 'block';
+                } else {
+                    cameraSelect.style.display = 'none';
+                }
+            } catch (error) {
+                console.error("Error al obtener cámaras:", error);
+                cameraSelect.style.display = 'none';
+            }
+        }
+
         // Alternar estado de la cámara
         async function toggleCamera() {
             if (cameraActive) {
@@ -349,30 +388,48 @@
 
                 html5QrCode = new Html5Qrcode("reader");
 
-                // Mejoras en la configuración
+                // Configuración mejorada para mejor detección
                 const config = { 
-                    fps: 25, // Más cuadros por segundo
-                    qrbox: { width: 350, height: 350 }, // Área de escaneo más grande y cuadrada
+                    fps: 10, // Reducido para mejor rendimiento
+                    qrbox: { width: 250, height: 250 }, // Tamaño más manejable
                     aspectRatio: 1.0,
-                    focusMode: "continuous",
-                    disableFlip: false, // Permite invertir si es necesario
-                    experimentalFeatures: {
-                        useBarCodeDetectorIfSupported: true
-                    },
-                    videoConstraints: {
-                        facingMode: "environment",
-                        width: { ideal: 1280 },
-                        height: { ideal: 720 },
-                        focusMode: "continuous"
-                    }
+                    disableFlip: false,
+                    supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA]
                 };
 
+                let cameraId;
+                if (cameraSelect.value) {
+                    cameraId = cameraSelect.value;
+                } else if (availableCameras.length > 0) {
+                    // Preferir cámara trasera si está disponible
+                    const rearCamera = availableCameras.find(cam => 
+                        cam.label.toLowerCase().includes('back') || 
+                        cam.label.toLowerCase().includes('rear') ||
+                        cam.label.toLowerCase().includes('environment')
+                    );
+                    cameraId = rearCamera ? rearCamera.id : availableCameras[0].id;
+                } else {
+                    cameraId = { facingMode: "environment" }; // Predeterminado a cámara trasera
+                }
+
                 await html5QrCode.start(
-                    { facingMode: "environment" }, 
+                    cameraId, 
                     config, 
                     onScanSuccess, 
                     onScanError
-                );
+                ).catch(err => {
+                    // Si falla con cámara específica, intentar con modo genérico
+                    if (err && typeof cameraId === 'string') {
+                        console.warn("Fallo con cámara específica, intentando con modo environment");
+                        return html5QrCode.start(
+                            { facingMode: "environment" }, 
+                            config, 
+                            onScanSuccess, 
+                            onScanError
+                        );
+                    }
+                    throw err;
+                });
 
                 cameraActive = true;
                 cameraToggleBtn.innerHTML = '<i class="fas fa-stop"></i> Detener Cámara';
@@ -382,11 +439,14 @@
 
             } catch (error) {
                 console.error("Error al iniciar la cámara:", error);
-                showMessage("Error al activar la cámara", "red");
+                showMessage("Error al activar la cámara: " + error.message, "red");
                 cameraActive = false;
                 cameraToggleBtn.innerHTML = '<i class="fas fa-camera"></i> Activar Cámara';
                 statusDot.classList.remove('active');
                 statusText.textContent = 'Error de activación';
+                
+                // Limpiar el lector en caso de error
+                document.getElementById('reader').innerHTML = "";
             }
         }
 
@@ -409,7 +469,7 @@
         }
 
         // Mostrar resultado del escaneo
-        function showResult(success, message, description, isFirstScan = false) {
+        function showResult(success, message, description) {
             const now = new Date();
             const formattedTime = formatDateTime(now);
 
@@ -449,12 +509,17 @@
             }
 
             scanResult.classList.add('show');
-            stopCamera();
         }
 
         // Ocultar resultado
         function hideResult() {
             scanResult.classList.remove('show');
+            // Reactivar la cámara después de ocultar el resultado
+            if (cameraActive) {
+                setTimeout(() => {
+                    initCamera().catch(console.error);
+                }, 500);
+            }
         }
 
         function setRange() {
@@ -471,8 +536,10 @@
 
         function playSound(id) {
             const audio = document.getElementById(id);
-            audio.currentTime = 0;
-            audio.play().catch(e => console.log("Error reproduciendo sonido:", e));
+            if (audio) {
+                audio.currentTime = 0;
+                audio.play().catch(e => console.log("Error reproduciendo sonido:", e));
+            }
         }
 
         function updateList() {
@@ -542,8 +609,8 @@
             showMessage("PDF exportado correctamente", "green");
         }
 
-        function onScanSuccess(decodedText) {
-            // Evitar múltiples escaneos rápidos
+        function onScanSuccess(decodedText, decodedResult) {
+            // Evitar múltiples escaneos rápidos del mismo código
             if (decodedText === lastScannedCode) return;
             lastScannedCode = decodedText;
 
@@ -554,7 +621,7 @@
             let tipo = '';
             if (/^PASE LIBRE (\d{1,3})$/i.test(normalized)) {
                 if (!isValidPaseLibre(decodedText)) {
-                    showResult(false, "Código no válido", "El formato debe ser: PASE LIBRE 001", false);
+                    showResult(false, "Código no válido", "El formato debe ser: PASE LIBRE 001");
                     return;
                 }
                 tipo = 'ENTRADA';
@@ -563,18 +630,18 @@
             } else if (/ENTRADA/i.test(normalized)) {
                 tipo = 'ENTRADA';
             } else {
-                showResult(false, "Código no válido", "El formato debe ser: PASE LIBRE 001, COVER o ENTRADA", false);
+                showResult(false, "Código no válido", "El formato debe ser: PASE LIBRE 001, COVER o ENTRADA");
                 return;
             }
 
             // Ya escaneado
             if (scannedCodes[normalized]) {
-                showResult(false, "Código ya escaneado", `Este código (${tipo}) ya fue registrado anteriormente`, false);
+                showResult(false, "Código ya escaneado", `Este código (${tipo}) ya fue registrado anteriormente`);
             } else {
                 // Registrar con tipo
                 scannedCodes[normalized] = { time: now.toISOString(), tipo };
                 scannedArr.push({ code: normalized, time: now.toISOString(), tipo });
-                showResult(true, `¡${tipo}! Ingresa`, `Código escaneado correctamente (${tipo})`, true);
+                showResult(true, `¡${tipo}! Ingresa`, `Código escaneado correctamente (${tipo})`);
                 updateList();
             }
         }
@@ -582,21 +649,26 @@
         // Manejo de error de cámara
         function onScanError(errorMessage) {
             // No mostrar errores menores continuos
-            if (!errorMessage || errorMessage.includes('NotFoundException')) {
-                return;
-            }
+            if (!errorMessage) return;
             
-            console.error("Error de escaneo:", errorMessage);
+            console.warn("Error de escaneo:", errorMessage);
             
             if (errorMessage.includes('NotAllowedError')) {
                 showMessage("Permiso de cámara denegado", "red");
             } else if (errorMessage.includes('NotFoundError') || errorMessage.includes('NotReadableError')) {
                 showMessage("Cámara no disponible", "red");
+            } else if (errorMessage.includes('No MultiFormat Readers')) {
+                // Este error es normal durante la inicialización
             }
         }
 
         // Inicializar lista vacía al cargar
         updateList();
+        
+        // Obtener cámaras disponibles al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            getCameras();
+        });
         
         // Detener la cámara al cerrar la página
         window.addEventListener('beforeunload', () => {
@@ -608,6 +680,17 @@
         // Actualizar rango cuando cambian los inputs
         document.getElementById('rangeStart').addEventListener('change', setRange);
         document.getElementById('rangeEnd').addEventListener('change', setRange);
+        
+        // Cambiar cámara cuando se selecciona una diferente
+        cameraSelect.addEventListener('change', function() {
+            if (cameraActive) {
+                stopCamera().then(() => {
+                    if (this.value) {
+                        initCamera();
+                    }
+                });
+            }
+        });
     </script>
 </body>
 </html>
