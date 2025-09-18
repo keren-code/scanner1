@@ -287,7 +287,7 @@
         </div>
     </div>
 
-    <audio id="firstScanSound" src="https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3"></audio>
+    <audio id="firstScanSound" src="scaner.mp3"></audio> <!-- Cambia aquí el audio -->
     <audio id="successSound" src="https://assets.mixkit.co/sfx/preview/mixkit-game-ball-tap-2073.mp3"></audio>
     <audio id="errorSound" src="https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3"></audio>
 
@@ -345,31 +345,32 @@
             try {
                 showMessage("Activando cámara...", "");
                 
-                // Crear una nueva instancia del escáner
                 html5QrCode = new Html5Qrcode("reader");
-                
-                // Configuración para móviles
+
+                // Mejoras en la configuración
                 const config = { 
-                    fps: 10, 
-                    qrbox: { width: 250, height: 150 },
+                    fps: 20, // Más cuadros por segundo
+                    qrbox: { width: 320, height: 220 }, // Área de escaneo más grande
                     aspectRatio: 1.0,
-                    focusMode: "continuous"
+                    focusMode: "continuous",
+                    experimentalFeatures: {
+                        useBarCodeDetectorIfSupported: true // Usa el detector nativo si está disponible
+                    }
                 };
-                
-                // Iniciar el escáner
+
                 await html5QrCode.start(
                     { facingMode: "environment" }, 
                     config, 
                     onScanSuccess, 
                     onScanError
                 );
-                
+
                 cameraActive = true;
                 cameraToggleBtn.innerHTML = '<i class="fas fa-stop"></i> Detener Cámara';
                 statusDot.classList.add('active');
                 statusText.textContent = 'Escaneando...';
                 showMessage("Cámara activada. Escaneando...", "green");
-                
+
             } catch (error) {
                 console.error("Error al iniciar la cámara:", error);
                 showMessage("Error al activar la cámara", "red");
@@ -402,7 +403,7 @@
         function showResult(success, message, description, isFirstScan = false) {
             const now = new Date();
             const formattedTime = formatDateTime(now);
-            
+
             if (success) {
                 resultIcon.className = 'result-icon success';
                 resultIcon.innerHTML = '<i class="fas fa-check-circle"></i>';
@@ -413,9 +414,14 @@
                 resultTime.textContent = formattedTime;
                 resultTime.style.color = '#64748b';
                 acceptButton.style.display = 'block';
-                
-                // Reproducir sonido específico para primer escaneo
-                playSound(isFirstScan ? 'firstScanSound' : 'successSound');
+
+                // Sonido personalizado solo en el primer escaneo
+                if (!firstScanDone) {
+                    playSound('firstScanSound');
+                    firstScanDone = true;
+                } else {
+                    playSound('successSound');
+                }
             } else {
                 resultIcon.className = 'result-icon error';
                 resultIcon.innerHTML = '<i class="fas fa-times-circle"></i>';
@@ -426,19 +432,14 @@
                 resultTime.textContent = formattedTime;
                 resultTime.style.color = '#64748b';
                 acceptButton.style.display = 'block';
-                
-                // Reproducir sonido de error
+
                 playSound('errorSound');
-                
-                // Vibrar en caso de error
                 if (navigator.vibrate) {
                     navigator.vibrate(300);
                 }
             }
-            
+
             scanResult.classList.add('show');
-            
-            // Detener la cámara automáticamente
             stopCamera();
         }
 
