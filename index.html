@@ -301,6 +301,7 @@
         let html5QrCode = null;
         let cameraActive = false;
         let lastScannedCode = '';
+        let firstScanDone = false; // <-- Cambiado aquí
 
         // Elementos DOM
         const statusDot = document.getElementById('statusDot');
@@ -344,17 +345,25 @@
         async function initCamera() {
             try {
                 showMessage("Activando cámara...", "");
-                
+                document.getElementById('reader').innerHTML = ""; // Limpia el área del lector
+
                 html5QrCode = new Html5Qrcode("reader");
 
                 // Mejoras en la configuración
                 const config = { 
-                    fps: 20, // Más cuadros por segundo
-                    qrbox: { width: 320, height: 220 }, // Área de escaneo más grande
+                    fps: 25, // Más cuadros por segundo
+                    qrbox: { width: 350, height: 350 }, // Área de escaneo más grande y cuadrada
                     aspectRatio: 1.0,
                     focusMode: "continuous",
+                    disableFlip: false, // Permite invertir si es necesario
                     experimentalFeatures: {
-                        useBarCodeDetectorIfSupported: true // Usa el detector nativo si está disponible
+                        useBarCodeDetectorIfSupported: true
+                    },
+                    videoConstraints: {
+                        facingMode: "environment",
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 },
+                        focusMode: "continuous"
                     }
                 };
 
