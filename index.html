@@ -264,15 +264,15 @@
         
         <div class="scanner-status">
             <div class="status-dot" id="statusDot"></div>
-            <span id="statusText">Cámara desactivada</span>
+            <span id="statusText">Iniciando cámara...</span>
         </div>
         
         <div class="scan-instructions">
-            Presiona el botón para activar la cámara y escanear
+            Escaneando códigos QR automáticamente
         </div>
         
         <button onclick="toggleCamera()" id="cameraToggleBtn">
-            <i class="fas fa-camera"></i> Activar Cámara
+            <i class="fas fa-stop"></i> Detener Cámara
         </button>
         
         <div id="reader"></div>
@@ -460,6 +460,8 @@
         // Ocultar resultado
         function hideResult() {
             scanResult.classList.remove('show');
+            // Reiniciar la cámara después de ocultar el resultado
+            setTimeout(initCamera, 500);
         }
 
         function showMessage(msg, color) {
@@ -598,6 +600,11 @@
 
         // Inicializar lista vacía al cargar
         updateList();
+        
+        // Iniciar la cámara automáticamente al cargar la página
+        window.addEventListener('load', function() {
+            setTimeout(initCamera, 500); // Pequeño retraso para asegurar que todo esté cargado
+        });
         
         // Detener la cámara al cerrar la página
         window.addEventListener('beforeunload', () => {
